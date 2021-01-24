@@ -40,7 +40,7 @@ const movies = [
 
 const App = () => {
     return (
-        <h1>My Movies</h1>
+        <h1>My Movies </h1>
     )
 }
 
