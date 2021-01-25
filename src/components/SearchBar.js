@@ -1,11 +1,26 @@
 import React from 'react';
 
 class SearchBar extends React.Component {
+
+    state = {
+        searchQuery: ""
+    }
+    handleFormSubmit =(event) => {
+        event.preventDefault();
+    } 
+
     render() {
         return (
-            <h1>
-                SearchBar
-            </h1>
+            <form onSubmit={this.handleFormSubmit}>
+                <div className='form-row mb-5 mt-2'>
+                    <div className='col-12'>
+                        <input onChange={(event)=> this.setState({searchQuery: event.target.value})} 
+                        type='text' className='form-control' 
+                        placeholder='Search Movie'
+                        value = {this.state.searchQuery}></input>
+                    </div>
+                    </div>        
+            </form>
         )
     }
 }
