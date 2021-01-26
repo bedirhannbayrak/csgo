@@ -2,10 +2,9 @@ import React from 'react';
 import MovieList from './MovieList';
 import SearchBar from './SearchBar';
 import AddMovie from './AddMovie';
-import EditdMovie from './EditMovie';
+import EditMovie from './EditMovie';
 import axios from 'axios';
-import { BrowserRouter as Router, Switch, Route, } from "react-router-dom";
-
+import { BrowserRouter as Router, Route, } from "react-router-dom";
 
 
 class App extends React.Component {
@@ -17,9 +16,13 @@ class App extends React.Component {
     }
 
     async componentDidMount() {
+        this.getMovies();
+
+    }
+
+    async getMovies() {
         const response = await axios.get('http://localhost:3003/movies');
         this.setState({ movies: response.data })
-
     }
 
     deleteMovie = async (movie) => {
@@ -32,6 +35,7 @@ class App extends React.Component {
         this.setState(state => ({
             movies: newMovieList
         }))
+        this.getMovies();
     }
 
     searchMovie = (event) => {
@@ -41,9 +45,15 @@ class App extends React.Component {
 
     addMovie = async (movie) => {
         await axios.post(`http://localhost:3003/movies`, movie)
-        this.setState( state =>({
+        this.setState(state => ({
             movies: state.movies.concat([movie])
         }))
+        this.getMovies();
+    }
+
+    editMovie = async (id, updatedMovie) => {
+        await axios.put(`http://localhost:3003/movies/${id}`, updatedMovie)
+        this.getMovies();
     }
 
     render() {
@@ -52,7 +62,7 @@ class App extends React.Component {
             (movie) => {
                 return movie.name.toLowerCase().indexOf(this.state.searchQuery.toLowerCase()) !== -1
             }
-        ).sort((a,b) => { return b.id-a.id })
+        ).sort((a, b) => { return b.id - a.id })
 
         return (
             <Router>
@@ -73,28 +83,33 @@ class App extends React.Component {
                     )}>
 
                     </Route>
-                    <Route path='/add'  render={( {history}) => (
+                    <Route path='/add' render={({ history }) => (
 
                         <AddMovie
-
-                            onAddMovie={(movie) => { this.addMovie(movie) 
-                            history.push('/')}
-                           
-                        }
+                            onAddMovie={(movie) => {
+                                this.addMovie(movie)
+                                history.push('/')
+                            }
+                            }
                         />
 
                     )}>
                     </Route>
 
-                    <Route path="/edit/:id" component={EditdMovie} />
-
+                    <Route path='/edit/:id' render={(props) => (
+                        <EditMovie
+                            {...props}
+                            onEditMovie={(id, movie) => {
+                                this.editMovie(id, movie)
+                                }
+                            }
+                        />
+                    )}>
+                    </Route>
                 </div>
             </Router>
         )
-
     }
-
-
 }
 
 export default App;

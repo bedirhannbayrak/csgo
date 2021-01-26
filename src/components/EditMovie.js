@@ -28,6 +28,38 @@ class EditMovie extends React.Component {
 
     handleFormSubmit = (e) => {
         e.preventDefault();
+
+        /*
+        const name = this.state.name
+        const rating = this.state.rating
+        const overview = this.state.overview
+        const imageURL = this.state.imageURL
+
+        */
+        
+        // aynı işlemin kısayolu
+        const {name,rating,overview,imageURL} = this.state;
+        const id = this.props.match.params.id
+        
+        /*
+        const updatedMovie = {
+            name:name,
+            rating:rating,
+            overview:overview,
+            imageURL:imageURL
+        }
+        */
+
+        //yukarıdakiyle aynı kod
+        const updatedMovie = {
+            name,
+            rating,
+            overview,
+            imageURL
+        }
+        this.props.onEditMovie(id,updatedMovie);
+        this.props.history.push('/')
+
     }
 
     onInputChange = (event) => {
