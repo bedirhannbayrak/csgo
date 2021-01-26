@@ -20,6 +20,12 @@ class App extends React.Component {
         console.log(response)
         this.setState({movies:response.data})
 
+
+    async componentDidMount() {
+        const response = await axios.get(`https://api.themoviedb.org/3/list/7073538?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`);
+        console.log(response.data.items)
+        this.setState({ movies: response.data.items});
+        
     }
 
        deleteMovie = async (movie) => {
@@ -35,15 +41,14 @@ class App extends React.Component {
     }
 
     searchMovie = (event) => {
-        //console.log(event.target.value)
-        this.setState({searchQuery: event.target.value })
+        this.setState({ searchQuery: event.target.value })
     }
 
     render() {
 
         let filteredMovies = this.state.movies.filter(
             (movie) => {
-                return movie.name.toLowerCase().indexOf(this.state.searchQuery.toLowerCase()) !== -1
+                return movie.title.toLowerCase().indexOf(this.state.searchQuery.toLowerCase()) !== -1
             }
         )
 
