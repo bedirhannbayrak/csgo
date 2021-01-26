@@ -1,18 +1,21 @@
 import React from 'react';
+import {Link } from 'react-router-dom';
+
 
 class SearchBar extends React.Component {
 
     state = {
         searchQuery: ""
     }
-    handleFormSubmit =(event) => {
-        event.preventDefault();
+    handleFormSubmit =(e) => {
+        e.preventDefault();
+        
     } 
 
     render() {
         return (
             <form onSubmit={this.handleFormSubmit}>
-            <div className="form-row mb-5">
+            <div className="form-row mb-5 mt-5">
                 <div className="col-10">
                     <input 
                     
@@ -22,10 +25,12 @@ class SearchBar extends React.Component {
                     />
                 </div>
                 <div className="col-2">
-                    <button type="button" 
+                    <Link 
+                            to="/add"
+                            type="Link" 
                             className="btn btn-md btn-danger"
                             style={{float:'right'}}>Add Movie
-                    </button>
+                    </Link>
                 </div>
             </div>
         </form>
