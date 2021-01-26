@@ -2,12 +2,10 @@ import React from 'react';
 import MovieList from './MovieList';
 import SearchBar from './SearchBar';
 import axios from 'axios';
+require('dotenv').config();
 
 
 class App extends React.Component {
-
-
-
 
     state = {
         movies: [],
@@ -15,44 +13,21 @@ class App extends React.Component {
         searchQuery: ""
     }
 
-    // async componentDidMount(){
-    //   const baseURL = "http://localhost:3003/movies";
-    //   const response = await fetch(baseURL);
-    //   const data = await response.json();
-    //   this.setState({movies:data})
-    // }
-    
     async componentDidMount() {
-        const response = await axios.get('http://localhost:3003/movies');
-        console.log(response)
-        this.setState({movies:response.data})
+        const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`);
+        console.log(response.data.results)
+        this.setState({ movies: response.data.results })
 
     }
 
-    
-/*  FETCH API DELETE METHODU
-
     deleteMovie = async (movie) => {
-        const baseURL = `http://localhost:3003/movies/${movie.id}`;
-        await fetch(baseURL, {
-            method: 'DELETE'
-        })
-
-        const newMovieList = this.state.movies.filter(
-            m => m.id !== movie.id
-        );
-        */
-
-       deleteMovie = async (movie) => {
         const baseURL = `http://localhost:3003/movies/${movie.id}`;
         await axios.delete(baseURL);
         const newMovieList = this.state.movies.filter(
             m => m.id !== movie.id
         );
 
-/*         this.setState ({
-            movies: newMovieList
-        }) */
+
 
         this.setState(state => ({
             movies: newMovieList
@@ -60,15 +35,14 @@ class App extends React.Component {
     }
 
     searchMovie = (event) => {
-        //console.log(event.target.value)
-        this.setState({searchQuery: event.target.value })
+        this.setState({ searchQuery: event.target.value })
     }
 
     render() {
 
         let filteredMovies = this.state.movies.filter(
             (movie) => {
-                return movie.name.toLowerCase().indexOf(this.state.searchQuery.toLowerCase()) !== -1
+                return movie.title.toLowerCase().indexOf(this.state.searchQuery.toLowerCase()) !== -1
             }
         )
 
