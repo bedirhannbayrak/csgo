@@ -1,6 +1,8 @@
 import React from 'react';
 import MovieList from './MovieList';
 import SearchBar from './SearchBar';
+import axios from 'axios';
+
 
 class App extends React.Component {
 
@@ -13,15 +15,37 @@ class App extends React.Component {
         searchQuery: ""
     }
 
-    async componentDidMount(){
-      const baseURL = "http://localhost:3003/movies";
-      const response = await fetch(baseURL);
-      const data = await response.json();
-      this.setState({movies:data})
+    // async componentDidMount(){
+    //   const baseURL = "http://localhost:3003/movies";
+    //   const response = await fetch(baseURL);
+    //   const data = await response.json();
+    //   this.setState({movies:data})
+    // }
+    
+    async componentDidMount() {
+        const response = await axios.get('http://localhost:3003/movies');
+        console.log(response)
+        this.setState({movies:response.data})
+
     }
 
+    
+/*  FETCH API DELETE METHODU
 
-    deleteMovie = (movie) => {
+    deleteMovie = async (movie) => {
+        const baseURL = `http://localhost:3003/movies/${movie.id}`;
+        await fetch(baseURL, {
+            method: 'DELETE'
+        })
+
+        const newMovieList = this.state.movies.filter(
+            m => m.id !== movie.id
+        );
+        */
+
+       deleteMovie = async (movie) => {
+        const baseURL = `http://localhost:3003/movies/${movie.id}`;
+        await axios.delete(baseURL);
         const newMovieList = this.state.movies.filter(
             m => m.id !== movie.id
         );
