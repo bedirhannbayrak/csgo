@@ -13,16 +13,19 @@ class App extends React.Component {
         searchQuery: ""
     }
 
-    async componentDidMount() {
-        const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`);
-        console.log(response.data.results)
-        this.setState({ movies: response.data.results })
 
+
+    async componentDidMount() {
+        const response = await axios.get(`https://api.themoviedb.org/3/list/7073538?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`);
+        console.log(response.data.items)
+        this.setState({ movies: response.data.items});
+        
     }
 
+
     deleteMovie = async (movie) => {
-        const baseURL = `http://localhost:3003/movies/${movie.id}`;
-        await axios.delete(baseURL);
+        const baseURL = `https://api.themoviedb.org/3/list/7073538/remove_item?media_id=${movie.id}&api_key=${process.env.REACT_APP_API_KEY}&session_id=${process.env.REACT_APP_SESSION_ID}`;
+        await axios.post(baseURL);
         const newMovieList = this.state.movies.filter(
             m => m.id !== movie.id
         );
