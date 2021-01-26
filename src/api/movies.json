@@ -43,7 +43,18 @@
       "imageURL": "https://image.tmdb.org/t/p/w220_and_h330_face/6Bbq8qQWpoApLZYWFFAuZ1r2gFw.jpg"
     },
     {
+      "name": "deneme",
+      "rating": "5",
+      "imageURL": "deneme.img",
+      "overview": "deneme.description",
       "id": 7
+    },
+    {
+      "name": "Çift Baba",
+      "rating": "7.8",
+      "imageURL": "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/y9k5MjbLsCftyrQ4ec6bPmRtORf.jpg",
+      "overview": "Annesinin yokluğunu fırsat bilen genç bir kız, yaşadığı hippi mahallesinden gizlice çıkar ve babasının kim olduğunu keşfetmek için hayat değiştiren bir maceraya atılır.",
+      "id": 8
     }
   ]
 }
