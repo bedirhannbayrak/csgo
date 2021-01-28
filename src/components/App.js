@@ -21,7 +21,9 @@ class App extends React.Component {
     }
 
     async getMovies() {
-        const response = await axios.get('http://localhost:3003/movies');
+        console.log("object")
+        const response = await axios.get('https://hltv-api.vercel.app/api/results');
+        
         this.setState({ movies: response.data })
     }
 
