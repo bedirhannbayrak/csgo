@@ -1,8 +1,8 @@
 import React from 'react';
-import MovieList from './MovieList';
+import MatchList from './MatchList';
 import SearchBar from './SearchBar';
-import AddMovie from './AddMovie';
-import EditMovie from './EditMovie';
+import AddMatch from './AddMatch';
+import Collapse from './Collapse';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, } from "react-router-dom";
 
@@ -10,105 +10,45 @@ import { BrowserRouter as Router, Route, } from "react-router-dom";
 class App extends React.Component {
 
     state = {
-        movies: [],
+        matches: [],
 
         searchQuery: ""
     }
 
     async componentDidMount() {
-        this.getMovies();
-
+        await this.getMatches();
+        console.log(this.state.matches)
     }
 
-    async getMovies() {
-        console.log("object")
-        const response = await axios.get('https://hltv-api.vercel.app/api/results');
+    async getMatches(){
+        const baseURL = "http://localhost:3003";
+        const response = await fetch(baseURL);
+        const data = await response.json();
+        this.setState({matches:data})
+      }
+
         
-        this.setState({ movies: response.data })
-    }
 
-    deleteMovie = async (movie) => {
-        const baseURL = `http://localhost:3003/movies/${movie.id}`;
-        await axios.delete(baseURL);
-        const newMovieList = this.state.movies.filter(
-            m => m.id !== movie.id
-        );
-
-        this.setState(state => ({
-            movies: newMovieList
-        }))
-        this.getMovies();
-    }
-
-    searchMovie = (event) => {
+    searchMatch = (event) => {
         //console.log(event.target.value)
         this.setState({ searchQuery: event.target.value })
     }
 
-    addMovie = async (movie) => {
-        await axios.post(`http://localhost:3003/movies`, movie)
-        this.setState(state => ({
-            movies: state.movies.concat([movie])
-        }))
-        this.getMovies();
-    }
-
-    editMovie = async (id, updatedMovie) => {
-        await axios.put(`http://localhost:3003/movies/${id}`, updatedMovie)
-        this.getMovies();
-    }
+    
 
     render() {
 
-        let filteredMovies = this.state.movies.filter(
-            (movie) => {
-                return movie.name.toLowerCase().indexOf(this.state.searchQuery.toLowerCase()) !== -1
-            }
-        ).sort((a, b) => { return b.id - a.id })
+        let filteredMatches = this.state.matches
 
         return (
             <Router>
                 <div className="container">
-
-                    <Route path='/' exact render={() => (
-                        <React.Fragment>
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <SearchBar searchMovieProp={this.searchMovie} />
-                                </div>
-                            </div>
-
-                            <MovieList
-                                movies={filteredMovies}
-                                deleteMovieProp={this.deleteMovie} />
-                        </React.Fragment>
-                    )}>
-
-                    </Route>
-                    <Route path='/add' render={({ history }) => (
-
-                        <AddMovie
-                            onAddMovie={(movie) => {
-                                this.addMovie(movie)
-                                history.push('/')
-                            }
-                            }
-                        />
-
-                    )}>
-                    </Route>
-
-                    <Route path='/edit/:id' render={(props) => (
-                        <EditMovie
-                            {...props}
-                            onEditMovie={(id, movie) => {
-                                this.editMovie(id, movie)
-                                }
-                            }
-                        />
-                    )}>
-                    </Route>
+                    
+                        <MatchList
+                        matches= {this.state.matches} />
+                    
                 </div>
+
             </Router>
         )
     }
