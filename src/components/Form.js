@@ -1,10 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const Form = () => {
+const Form = ({ setInputText, inputText, todos, setTodos }) => {
+
+    const [showAlert, setShowAlert] = useState(false)
+
+    const inputTextHandler = (e) => {
+        setInputText(e.target.value);
+        setShowAlert(false)
+    }
+    const submitTodoHandler = (e) => {
+        e.preventDefault();
+        if (inputText.length > 0) {
+            setTodos([
+                ...todos,
+                { text: inputText, completed: false, id: Math.random() * 1000 }
+            ]);
+            setInputText('');
+
+        }
+        else (
+            setShowAlert(true)
+        )
+
+    }
+
     return (
+        <>
             <form>
-                <input type="text" className="todo-input" />
-                <button className="todo-button" type="submit">
+                <input value={inputText} onChange={inputTextHandler} type="text" className="todo-input" />
+                <button onClick={submitTodoHandler} className="todo-button" type="submit">
                     <i className="fas fa-plus-square"></i>
                 </button>
                 <div className="select">
@@ -15,6 +39,18 @@ const Form = () => {
                     </select>
                 </div>
             </form>
+
+            {
+                showAlert ? (
+                    <div className='alert' style={{ display:"flex" , aligItem:"center" , justifyContent:'center' , paddingBottom:"1rem" ,color:"red"}}>
+                        <h3>
+                            Please fill the blank
+                        </h3>
+                    </div>
+                ) : null
+            }
+
+        </>
     )
 }
 
