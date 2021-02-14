@@ -16,7 +16,7 @@ const Todo = ({text,id,completed ,todo, todos , setTodos}) => {
 
     return (
         <div className='todo-container'>
-            <li className='todo-item' >{text}</li>
+            <li className={`'todo-item' ${todo.completed ? 'completed' : null }`} >{text}</li>
             <button onClick={completeHandler} className='complete-btn' >
                 <i className='fas fa-check'></i>
             </button>
